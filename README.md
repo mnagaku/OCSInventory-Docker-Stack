@@ -10,7 +10,13 @@ OCSInventory-NG/OCSInventory-Docker-Stack
 
 https://hub.docker.com/r/diouxx/glpi
 
-を混ぜて、ついでにjupyterも付けた。jupyterは、/var/run/docker.sockを付けてないので、使い道イマイチかも知んない。
+を混ぜて、ついでにjupyterも付けた。
+
+jupyterに
+
+https://github.com/mnagaku/docker-handson/blob/master/%E3%81%8A%E3%81%BE%E3%81%98%E3%81%AA%E3%81%84.ipynb
+
+をインポートして、dockerコマンドのインストールすると、docker execで、OCSIとかGLPIのコンテナにコマンドを入れれるようになる。
 
 ----
 
