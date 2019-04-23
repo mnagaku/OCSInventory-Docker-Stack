@@ -1,51 +1,53 @@
 version: '2'
 
 
-services :
+services:
 
-  osciweb :
-    image : ocsinventory/ocsinventory-docker-image
-    environment :
-      OCS_DBNAME : ocsweb
-      OCS_DBUSER : ocs
-      OCS_DBPASS : ocs
-      OCS_DBSERVER_READ : ocsidb
-      OCS_DBSERVER_WRITE : ocsidb
-    volumes :
+  osciweb:
+    image: ocsinventory/ocsinventory-docker-image
+    environment:
+      OCS_DBNAME: ocsidb
+      OCS_DBUSER: ocsiuser
+      OCS_DBPASS: ocsipassword
+      OCS_DBSERVER_READ: ocsidb
+      OCS_DBSERVER_WRITE: ocsidb
+    volumes:
       - ocsdownload:/usr/share/ocsinventory-reports/ocsreports/download/
       - ocssrv:/etc/ocsinventory-reports/
       - ocslib:/var/lib/ocsinventory-reports/
-    links :
+    links:
       - ocsidb
-    ports :
+    ports:
       - 8080:80
 
-  ocsidb :
-    image : mysql
+  ocsidb:
+    image: mysql:5.7
+    hostname: ocsidb
     environment:
-      MYSQL_ROOT_PASSWORD : ocsidbpassword
-      MYSQL_DATABASE : ocsweb
-      MYSQL_USER : ocs
-      MYSQL_PASSWORD : ocs
-    volumes :
+      MYSQL_ROOT_PASSWORD: ocsidbpassword
+      MYSQL_DATABASE: ocsidb
+      MYSQL_USER: ocsiuser
+      MYSQL_PASSWORD: ocsipassword
+    volumes:
       - ./sql/:/docker-entrypoint-initdb.d/
       - ocsdata:/var/lib/mysql
 
   glpi:
     image: diouxx/glpi
-    links :
-      - mysql
+    links:
+      - glpidb
     ports:
       - 80:80
 
-  mysql:
-    image: mysql
+  glpidb:
+    image: mysql:5.7
+    hostname: glpidb
     environment:
-      MYSQL_ROOT_PASSWORD : glpidbpassword
-      MYSQL_DATABASE : glpidb
-      MYSQL_USER : glpi_user
-      MYSQL_PASSWORD : glpi
-    volumes :
+      MYSQL_ROOT_PASSWORD: glpidbpassword
+      MYSQL_DATABASE: glpidb
+      MYSQL_USER: glpiuser
+      MYSQL_PASSWORD: glpipassword
+    volumes:
       - glpidata:/var/lib/mysql
 
   jupyter:
