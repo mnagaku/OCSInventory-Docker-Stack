@@ -1,38 +1,60 @@
-version: '3'
+version: '2'
+
+
 services :
-  web :
-    image : ocsinventory/ocsinventory-docker-image:latest
-    container_name : ocsinventory-server
+
+  osciweb :
+    image : ocsinventory/ocsinventory-docker-image
     environment :
       OCS_DBNAME : ocsweb
-      OCS_DBSERVER_READ : ocsinventory-db
-      OCS_DBSERVER_WRITE : ocsinventory-db
       OCS_DBUSER : ocs
       OCS_DBPASS : ocs
+      OCS_DBSERVER_READ : ocsidb
+      OCS_DBSERVER_WRITE : ocsidb
     volumes :
       - ocsdownload:/usr/share/ocsinventory-reports/ocsreports/download/
       - ocssrv:/etc/ocsinventory-reports/
       - ocslib:/var/lib/ocsinventory-reports/
     links :
-      - db
+      - ocsidb
     ports :
-      - 80:80
-      - 443:443
+      - 8080:80
 
-  db :
-    image : mysql:5.7
-    container_name : ocsinventory-db
-    restart: always
+  ocsidb :
+    image : mysql
     environment:
-      MYSQL_ROOT_PASSWORD : mdp
+      MYSQL_ROOT_PASSWORD : ocsidbpassword
+      MYSQL_DATABASE : ocsweb
       MYSQL_USER : ocs
       MYSQL_PASSWORD : ocs
-      MYSQL_DATABASE : ocsweb
     volumes :
       - ./sql/:/docker-entrypoint-initdb.d/
       - ocsdata:/var/lib/mysql
-    ports :
-      - 3306:3306
+
+  glpi:
+    image: diouxx/glpi
+    links :
+      - mysql
+    ports:
+      - 80:80
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD : glpidbpassword
+      MYSQL_DATABASE : glpidb
+      MYSQL_USER : glpi_user
+      MYSQL_PASSWORD : glpi
+    volumes :
+      - glpidata:/var/lib/mysql
+
+  jupyter:
+    image: mnagaku/lc-minimal-notebook
+    ports:
+      - 8888:8888
+    volumes:
+      - notebooks:/home/jovyan/notebooks
+
 
 volumes:
   ocsdata:
@@ -42,4 +64,8 @@ volumes:
   ocslib:
     driver: local
   ocsdownload:
+    driver: local
+  glpidata:
+    driver: local
+  notebooks:
     driver: local
