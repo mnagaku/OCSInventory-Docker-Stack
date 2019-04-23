@@ -54,7 +54,9 @@ services:
     image: mnagaku/lc-minimal-notebook
     ports:
       - 8888:8888
+    command: bash -c "set +u ; . /usr/local/bin/start.sh jupyter notebook --NotebookApp.token='jupyterpassword'"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - notebooks:/home/jovyan/notebooks
 
 
