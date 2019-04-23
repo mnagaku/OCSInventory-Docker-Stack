@@ -1,3 +1,25 @@
+
+IT資産管理をオープンソースだけでやってみたメモ（OCS Inventory NG + GLPI）
+https://qiita.com/nagase/items/c3a6184dd1a56e2ed34d
+
+を試しやすいように、
+
+OCSInventory-NG/OCSInventory-Docker-Stack
+
+のdocker-compose.ymlに
+
+https://hub.docker.com/r/diouxx/glpi
+
+を混ぜて、ついでにjupyterも付けた。jupyterは、/var/run/docker.sockを付けてないので、使い道イマイチかも知んない。
+
+----
+
+「IT資産管理をオープンソースだけでやってみたメモ」の、Windows関連のは別として、OCSIとGLPIにGUIであててる手順は、CLI化して、コンテナのビルド時に組み込むか、jupyterでやるか、どっちかにして、GUIの手順無しで構築できるようにしたい。
+
+あと、volumeは、最終的には、ローカルのファイルシステムを使うように切り替える。
+
+----
+
 <p align="center">
   <img src="https://cdn.ocsinventory-ng.org/common/banners/banner660px.png" height=300 width=660 alt="Banner">
 </p>
